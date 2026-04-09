@@ -1,0 +1,21 @@
+- [ ] import la data dans une super struct
+- [ ] Generer/Ecrire tout le boilerplate les struct etc pour interagire avec
+- [ ] Créer un générateur aléatoir(con) de solutions
+- [ ] Implémenter des métaheuristiques (on choisira ce qu'on veux dedans)
+  - [ ] Voisinage
+    - [ ] Tabou
+    - [ ] Recuit
+    - [ ] hill climb racing
+  - [ ] Algo génétique
+  - [ ] Algo de fourmis
+- [ ] Comparer les résultats
+  - [ ] performance temps d'execution
+  - [ ] Qualité de la réponse
+  - [ ] Faire des graph de tout ca
+  - [ ] Graph stylé des la longueur du chemin au fur et a mesure de la construction de la solution final
+  - [ ] Faire varier les paramètres des différents algo
+- [ ] Faire un rapport stylé
+  - [ ] compte rendu des comparaison
+  - [ ] explication de comment run le programme (flaaaaaaaake)
+- [ ] Prog linéaire (OR-tools) avec la modélisation donnée en cours
+  - [ ] Contruire des jeux de donnée de plus en plus gros
