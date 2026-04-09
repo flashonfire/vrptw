@@ -1,5 +1,6 @@
 - [ ] import la data dans une super struct
 - [ ] Generer/Ecrire tout le boilerplate les struct etc pour interagire avec
+  - [ ] Faire un visualisateur des chemin
 - [ ] Créer un générateur aléatoir(con) de solutions
 - [ ] Implémenter des métaheuristiques (on choisira ce qu'on veux dedans)
   - [ ] Voisinage
