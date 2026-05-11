@@ -1,12 +1,12 @@
 - [x] import la data dans une super struct
-- [ ] Generer/Ecrire tout le boilerplate les struct etc pour interagire avec
-  - [ ] Faire un visualisateur des chemin
-- [ ] Créer un générateur aléatoir(con) de solutions
-- [ ] Implémenter des métaheuristiques (on choisira ce qu'on veux dedans)
-  - [ ] Voisinage
-    - [ ] Tabou
-    - [ ] Recuit
-    - [ ] hill climb racing
+- [x] Generer/Ecrire tout le boilerplate les struct etc pour interagire avec
+  - [x] Faire un visualisateur des chemin
+- [x] Créer un générateur aléatoir(con) de solutions
+- [x] Implémenter des métaheuristiques (on choisira ce qu'on veux dedans)
+  - [x] Voisinage
+    - [x] Tabou
+    - [x] Recuit
+    - [x] hill climb racing
   - [ ] Algo génétique
   - [ ] Algo de fourmis
 - [ ] Comparer les résultats
