@@ -3,7 +3,7 @@
 use anyhow::{Context, Result, bail};
 use std::path::Path;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct VrptwData {
     pub name: String,
     pub comment: Option<String>,
@@ -12,7 +12,7 @@ pub struct VrptwData {
     pub clients: Vec<Client>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Depot {
     pub id: String,
     pub x: f64,
@@ -21,7 +21,7 @@ pub struct Depot {
     pub due_time: i64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Client {
     pub id: String,
     pub x: f64,
@@ -151,4 +151,26 @@ fn parse_client(line_no: usize, line: &str) -> Result<Client> {
             .parse()
             .with_context(|| format!("line {line_no}: invalid client.service_time"))?,
     })
+}
+
+impl VrptwData {
+    pub fn without_time_windows(&self) -> Self {
+        Self {
+            depot: Depot {
+                ready_time: 0,
+                due_time: i64::MAX,
+                ..self.depot.clone()
+            },
+            clients: self
+                .clients
+                .iter()
+                .map(|c| Client {
+                    ready_time: 0,
+                    due_time: i64::MAX,
+                    ..c.clone()
+                })
+                .collect(),
+            ..self.clone()
+        }
+    }
 }

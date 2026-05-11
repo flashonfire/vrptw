@@ -140,6 +140,29 @@ Si plusieurs runs sont effectués, ajouter :
 - moyenne et écart-type sur `D`
 - meilleure valeur sur `D`
 
+## Comparaisons
+
+Le programme affiche désormais :
+
+- un tableau complet par instance (avec `K`, `D`, temps d’exécution, voisinages et paramètres)
+- deux tableaux de synthèse **par instance** et **séparés avec et sans fenêtres de temps** :
+  - **Qualité** : distance moyenne (ordre du meilleur au moins bon)
+  - **Rapidité** : temps moyen (ordre du plus rapide au plus lent)
+
+Chaque ligne correspond à une configuration :
+
+- Méthode (Random Walk / Descente / Tabou / Recuit)
+- Voisinage utilisé (relocate, relocate+swap, relocate+swap+2-opt)
+- Paramètres (itérations, température, tenure, etc.)
+
+La colonne `DeltaBest` indique l’écart par rapport au meilleur résultat du tableau (plus faible = meilleur).
+
+Les tableaux sont générés directement dans la sortie CLI, et les valeurs détaillées sont sauvegardées dans :
+
+- `outputs/<instance>/results.csv`
+
+Remarque : par défaut, une seule exécution par configuration est effectuée ; la moyenne est donc égale à ce run. Pour obtenir des moyennes plus robustes, relancer plusieurs fois et moyenner, ou étendre le code pour répéter `N` runs par configuration.
+
 ## Graphiques
 
 Pour illustrer les résultats, on fournit :
@@ -162,6 +185,18 @@ Points à discuter :
 - Robustesse : variance entre runs, sensibilité à la graine
 - Sensibilité aux paramètres : impact des paramètres principaux sur le résultat
 - Impact des voisinages : quels mouvements apportent le plus
+
+Dans nos comparaisons par instance (avec et sans fenêtres de temps), on observe typiquement :
+
+- l’ajout de `swap` et `2-opt` améliore la qualité (distance) mais augmente souvent le temps
+- `relocate` seul reste le plus rapide mais donne des solutions moins bonnes
+- selon l’instance, `tabou` ou `recuit` obtient les meilleurs compromis qualité/temps
+
+Exemples d’images générées :
+
+![data101 off - tabou](outputs/data101/off_tabu_search.png)
+![data101 on - recuit](outputs/data101/on_simulated_annealing.png)
+![data201 off - descente](outputs/data201/off_descent.png)
 
 # Conclusion
 
