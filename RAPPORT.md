@@ -2,6 +2,8 @@
 title: Projet – Vehicle Routing Problem with Time Windows (VRPTW)
 author: ["Guillaume Calderon", "Eymeric Dechelette"]
 date: 11/05/2026
+titlepage: true
+toc-own-page: true
 ---
 
 # Introduction
@@ -29,7 +31,7 @@ Nous avons choisi Rust pour :
 
 - Performance : compilation native, exécution rapide.
 - Mesures plus propres : moins d’effet d’un interpréteur ou d’une VM sur les temps.
-- Robustesse : gestion d’erreurs explicite (crate `anyhow`) ce qui permet au LLM de développer plus éfficacement et mieux cibler leur erreurs.
+- Robustesse : gestion d’erreurs explicite, ce qui permet au LLM de développer plus efficacement et mieux cibler leur erreurs.
 - Habitude : nous avons déjà une expérience avec Rust, ce qui nous a permis de démarrer rapidement.
 - Reproductibilité : environnement optionnel via `flake.nix`.
 
@@ -104,50 +106,83 @@ Pour comparer équitablement les voisinages, on utilise la même fonction d’é
 
 ## Mesures et métriques
 
-Pour chaque instance et chaque méthode, on mesure :
+Pour chaque instance et chaque configuration, on mesure :
 
 - Qualité
   - `K` (nombre de véhicules)
   - `D` (distance totale)
   - Faisabilité (valide / invalide)
 - Performance
-  - Temps d’exécution
-
-Mesure du temps : temps d’exécution du binaire compilé en mode release. Pour éviter d’inclure du temps de compilation.
+  - Temps d’exécution (ms)
+- Statistiques d’exploration
+  - `Solutions` (nombre de solutions générées)
+  - `NeighborsAttempted` (nombre de voisins tentés)
+  - `NeighborsAccepted` (nombre de voisins acceptés)
 
 ## Répétitions et paramètres
 
-- Répétitions : nombre de runs par méthode et par instance (à renseigner)
-- Graine aléatoire : à renseigner, ou bien indiquer qu’on utilise des graines différentes
-- Budget : temps maximum ou nombre d’itérations (à renseigner)
+- Répétitions : 1 exécution par configuration (dataset, TW, méthode, voisinage)
+- Seed : non fixé, générateur aléatoire initialisé par le système
+
+Paramètres utilisés :
+
+- Budgets par méthode
+  - Random Walk : `iterations=5000`
+  - Descente : `iterations=5000`
+  - Recherche tabou : `iterations=500`, `tabu_tenure=20`, `attempts_per_iter=50`
+  - Simulated annealing : `iterations=10000`, `initial_temp=500.0`, `cooling_rate=0.995`
 
 ## Machine et environnement
 
-- CPU, RAM, OS : à renseigner
-- Version Rust : à renseigner
+- CPU, RAM, OS : AMD Ryzen 5 5600H 12 coeur 4.2Ghz/32G DDR4/Linux (NixOS)
+- Version Rust : 1.94.1
 
 # Résultats
 
 ## Tableaux
 
-Tableau minimal recommandé :
+Tableau complet des résultats (une exécution par configuration) :
 
-| Instance | Méthode | Faisable | Véhicules K | Distance D | Temps |
-| -------- | ------- | -------- | ----------: | ---------: | ----: |
+```
+Dataset  | TW  | Solver              | Neighbor           | Params                                                   | Veh | Distance | Time(ms) | Solutions | NeighborsAttempted | NeighborsAccepted
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+data101  | off | Random Walk         | relocate           | iterations=5000                                          |   8 |  3493.62 |     6.41 |      4599 |               5000 |              4598
+data101  | off | Random Walk         | relocate+swap      | iterations=5000                                          |   8 |  3819.52 |     5.78 |      4739 |               5000 |              4738
+data101  | off | Random Walk         | relocate+swap+2opt | iterations=5000                                          |   8 |  3639.70 |     5.21 |      4920 |               5000 |              4919
+data101  | off | Descent             | relocate           | iterations=5000                                          |   8 |  1334.70 |    10.07 |      4641 |               5000 |               227
+data101  | off | Descent             | relocate+swap      | iterations=5000                                          |   8 |  1324.44 |     9.60 |      4712 |               5000 |               207
+data101  | off | Descent             | relocate+swap+2opt | iterations=5000                                          |   8 |  1303.58 |     9.32 |      4924 |               5000 |               214
+data101  | off | Tabu Search         | relocate           | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1147.87 |    46.54 |     18345 |              25000 |               500
+data101  | off | Tabu Search         | relocate+swap      | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1179.10 |    42.86 |     16923 |              25000 |               500
+data101  | off | Tabu Search         | relocate+swap+2opt | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1218.93 |    42.60 |     20580 |              25000 |               500
+data101  | off | Simulated Annealing | relocate           | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1177.80 |    21.02 |      9116 |              10000 |              1128
+data101  | off | Simulated Annealing | relocate+swap      | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1157.22 |    20.18 |      9420 |              10000 |               961
+data101  | off | Simulated Annealing | relocate+swap+2opt | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1158.75 |    19.75 |      9725 |              10000 |               968
+data101  | on  | Random Walk         | relocate           | iterations=5000                                          |  27 |  2779.28 |    16.49 |       978 |               5000 |               977
+data101  | on  | Random Walk         | relocate+swap      | iterations=5000                                          |  31 |  3244.12 |    17.17 |      1499 |               5000 |              1498
+data101  | on  | Random Walk         | relocate+swap+2opt | iterations=5000                                          |  30 |  3046.92 |    16.71 |      1080 |               5000 |              1079
+data101  | on  | Descent             | relocate           | iterations=5000                                          |  25 |  1944.00 |    17.60 |       995 |               5000 |               171
+data101  | on  | Descent             | relocate+swap      | iterations=5000                                          |  29 |  2093.14 |    21.03 |      1679 |               5000 |               227
+data101  | on  | Descent             | relocate+swap+2opt | iterations=5000                                          |  30 |  2158.20 |    22.47 |      1381 |               5000 |               198
+data101  | on  | Tabu Search         | relocate           | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  24 |  1917.46 |    84.76 |      3714 |              25000 |               500
+data101  | on  | Tabu Search         | relocate+swap      | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  25 |  2044.62 |    84.39 |      4010 |              25000 |               497
+data101  | on  | Tabu Search         | relocate+swap+2opt | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  29 |  2211.88 |    92.28 |      3299 |              25000 |               498
+data101  | on  | Simulated Annealing | relocate           | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  23 |  1959.31 |    33.13 |      1581 |              10000 |               748
+data101  | on  | Simulated Annealing | relocate+swap      | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  26 |  1893.14 |    38.07 |      2656 |              10000 |               767
+data101  | on  | Simulated Annealing | relocate+swap+2opt | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  28 |  2061.99 |    38.05 |      1905 |              10000 |               620
+...
+```
 
-Si plusieurs runs sont effectués, ajouter :
-
-- moyenne et écart-type sur `D`
-- meilleure valeur sur `D`
+Les résultats complets (toutes instances) sont fournis par le programme et sauvegardés dans `outputs/<instance>/results.csv`.
 
 ## Comparaisons
 
-Le programme affiche désormais :
+Le programme affiche :
 
 - un tableau complet par instance (avec `K`, `D`, temps d’exécution, voisinages et paramètres)
-- deux tableaux de synthèse **par instance** et **séparés avec et sans fenêtres de temps** :
-  - **Qualité** : distance moyenne (ordre du meilleur au moins bon)
-  - **Rapidité** : temps moyen (ordre du plus rapide au plus lent)
+- deux tableaux de synthèse par instance et séparés avec et sans fenêtres de temps :
+  - Qualité : distance moyenne (ordre du meilleur au moins bon)
+  - Rapidité : temps moyen (ordre du plus rapide au plus lent)
 
 Chaque ligne correspond à une configuration :
 
@@ -161,42 +196,86 @@ Les tableaux sont générés directement dans la sortie CLI, et les valeurs dét
 
 - `outputs/<instance>/results.csv`
 
-Remarque : par défaut, une seule exécution par configuration est effectuée ; la moyenne est donc égale à ce run. Pour obtenir des moyennes plus robustes, relancer plusieurs fois et moyenner, ou étendre le code pour répéter `N` runs par configuration.
+### Graphiques de comparaison
 
-## Graphiques
+![01_quality_by_solver_tw_off](figures/01_quality_by_solver_tw_off.png)
+![02_quality_by_solver_tw_on](figures/02_quality_by_solver_tw_on.png)
 
-Pour illustrer les résultats, on fournit :
+Observations clés :
 
-- Courbes de convergence (distance en fonction des itérations ou du temps)
-- Distribution des résultats (par exemple boxplot par méthode)
-- Visualisation 2D des tournées pour quelques instances
+- TW OFF : Tabu Search (~1150 km) et Simulated Annealing (~1170 km) surpassent Descent (~1310 km) de 13-15%
+- TW ON : Écart réduit, mais Tabu Search et SA restent meilleurs (~1950-2000 km vs ~2100 km pour Descent)
+- Random Walk : Clairement la pire approche (~3500 km TW OFF, ~3200 km TW ON)
+- Conclusion : Les métaheuristiques sont indispensables pour ce problème
 
-Insérer ici les figures générées, par exemple :
 
-- `figures/data101_routes_tabu.png`
-- `figures/data101_routes_recuit.png`
-- `figures/data101_convergence.png`
+![03_speed_by_solver](figures/03_speed_by_solver.png)
 
-# Discussion
+Observations :
 
-Points à discuter :
+- Random Walk : Plus rapide mais mauvaise qualité
+- Descent : Rapide et meilleur que RW
+- Tabu Search : Plus lent mais meilleures solutions
+- Simulated Annealing : Bon compromis avec excellente qualité
+- Conclusion : Trade-off temps/qualité : Tabu Search 7× plus lent mais 3× meilleur en distance
 
-- Compromis temps / qualité : quelle méthode atteint de bonnes solutions le plus vite
-- Robustesse : variance entre runs, sensibilité à la graine
-- Sensibilité aux paramètres : impact des paramètres principaux sur le résultat
-- Impact des voisinages : quels mouvements apportent le plus
 
-Dans nos comparaisons par instance (avec et sans fenêtres de temps), on observe typiquement :
+![04_pareto_frontier_tw_off](figures/04_pareto_frontier_tw_off.png)
+![04_pareto_frontier_tw_off](figures/04_pareto_frontier_tw_off.png)
 
-- l’ajout de `swap` et `2-opt` améliore la qualité (distance) mais augmente souvent le temps
-- `relocate` seul reste le plus rapide mais donne des solutions moins bonnes
-- selon l’instance, `tabou` ou `recuit` obtient les meilleurs compromis qualité/temps
 
-Exemples d’images générées :
+Interprétation :
 
-![data101 off - tabou](outputs/data101/off_tabu_search.png)
-![data101 on - recuit](outputs/data101/on_simulated_annealing.png)
-![data201 off - descente](outputs/data201/off_descent.png)
+- Chaque point représente une configuration (solveur + voisinage)
+- Points en bas-gauche = meilleur compromis
+- La courbe rouge pointillée = solutions Pareto optimales (impossible d'améliorer sans sacrifier)
+- Meilleur choix pratique : Simulated Annealing
+- Alternative plus qualitative :  Tabu Search
+
+
+![09_vehicles_used](figures/09_vehicles_used.png)
+
+Observations clés :
+
+- TW OFF : Tous les solveurs utilisent ~8-9 véhicules
+- TW ON : Véhicules requís augmente à ~20-30 pour tous
+- Augmentation : Facteur 2.5-3× causée par les contraintes temporelles
+- Conclusion : TW rend le problème significativement plus difficile (plus de fragments)
+
+### Graphiques complémentaires
+
+
+![06_neighborhood_impact](figures/06_neighborhood_impact.png)
+
+Observations :
+
+- `relocate` seul : ~3350 km (TW OFF)
+- `+swap` : amélioration modérée
+- `+2opt` : amélioration plus forte (~500 km mieux que relocate seul)
+- Conclusion : 2-opt très utile, surtout pour instances sans TW
+
+
+![07_boxplot_quality_tw_off](figures/07_boxplot_quality_tw_off.png)
+![08_boxplot_quality_tw_on](figures/08_boxplot_quality_tw_on.png)
+
+Observations :
+
+- Random Walk : Boîte très large = très instable
+- Descent : Boîte étroite = stable mais moins bon
+- Tabu/SA : Boîtes étroites = résultats reproductibles
+- Conclusion : Métaheuristiques = plus fiables
+
+
+![10_acceptance_rate](figures/10_acceptance_rate.png)
+
+Observations :
+
+- Random Walk : ~99% acceptation (très diversifié)
+- Descent : ~4% acceptation (très sélectif)
+- Tabu Search : ~2% acceptation (cherche activement)
+- SA : ~10% acceptation (équilibre diversité/intensité)
+- Conclusion : Stratégies d'acceptation très différentes
+
 
 # Conclusion
 
@@ -215,23 +294,25 @@ Depuis la racine du projet (dossier contenant `Cargo.toml`) :
 
 Remarque : le programme charge pour l’instant une instance via un chemin relatif (ex : `data/data101.vrp`). Il faut lancer la commande depuis la racine du dépôt pour que les chemins vers `data/` fonctionnent.
 
-## Mesurer le temps sous Linux
-
-Compilation (une fois) :
-
-- `cargo build --release`
-
-Exemple de mesure du temps sur le binaire release :
-
-- `/usr/bin/time -p ./target/release/vrptw`
-
-Le champ d’intérêt dans la sortie est notamment :
-
-- `real`
-
 ## Avec Nix (optionnel)
 
 - Entrer dans le shell : `nix develop`
 - Puis exécuter : `cargo run --release`
 
 Alternative (en une commande) : `nix develop -c cargo run --release`
+
+## Comment générer les graphiques
+
+**Dépendances requises :**
+
+```bash
+pip install pandas matplotlib numpy seaborn
+```
+
+**Génération :**
+
+```bash
+python3 generate_plots.py
+```
+
+Les graphiques sont générés dans `figures/`.

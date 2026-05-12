@@ -272,7 +272,7 @@ df['Solutions'] = pd.to_numeric(df['Solutions'])
 solver_color_map = {
     'Random Walk': '#FF6B6B',
     'Descent': '#4ECDC4',
-    'Tabu Search': '#45B7D1',
+    'Tabu Search': '#D12BD1',
     'Simulated Annealing': '#FFA07A'
 }
 
@@ -288,8 +288,8 @@ solver_stats_off = tw_off.groupby('Solver')['Distance'].agg(['mean', 'std']).rei
 
 x = np.arange(len(solver_order))
 width = 0.6
-bars = ax.bar(x, solver_stats_off['mean'], width, 
-              yerr=solver_stats_off['std'], 
+bars = ax.bar(x, solver_stats_off['mean'], width,
+              yerr=solver_stats_off['std'],
               capsize=5,
               color=[solver_color_map[s] for s in solver_order],
               alpha=0.8,
@@ -298,7 +298,7 @@ bars = ax.bar(x, solver_stats_off['mean'], width,
 
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
 ax.set_xlabel('Solver Method', fontsize=12, fontweight='bold')
-ax.set_title('Solution Quality Comparison (Distance) - Time Windows OFF\nMean ± Std across all instances & neighborhoods', 
+ax.set_title('Solution Quality Comparison (Distance) - Time Windows OFF\nMean ± Std across all instances & neighborhoods',
              fontsize=13, fontweight='bold', pad=20)
 ax.set_xticks(x)
 ax.set_xticklabels(solver_order, fontsize=11)
@@ -306,7 +306,7 @@ ax.grid(axis='y', alpha=0.3)
 
 # Add value labels on bars
 for i, (bar, mean, std) in enumerate(zip(bars, solver_stats_off['mean'], solver_stats_off['std'])):
-    ax.text(bar.get_x() + bar.get_width()/2, mean + std + 100, 
+    ax.text(bar.get_x() + bar.get_width()/2, mean + std + 100,
             f'{mean:.0f}', ha='center', va='bottom', fontweight='bold', fontsize=10)
 
 plt.tight_layout()
@@ -322,8 +322,8 @@ fig, ax = plt.subplots(figsize=(16, 6))
 tw_on = df[df['TW'] == 'on']
 solver_stats_on = tw_on.groupby('Solver')['Distance'].agg(['mean', 'std']).reindex(solver_order)
 
-bars = ax.bar(x, solver_stats_on['mean'], width, 
-              yerr=solver_stats_on['std'], 
+bars = ax.bar(x, solver_stats_on['mean'], width,
+              yerr=solver_stats_on['std'],
               capsize=5,
               color=[solver_color_map[s] for s in solver_order],
               alpha=0.8,
@@ -332,14 +332,14 @@ bars = ax.bar(x, solver_stats_on['mean'], width,
 
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
 ax.set_xlabel('Solver Method', fontsize=12, fontweight='bold')
-ax.set_title('Solution Quality Comparison (Distance) - Time Windows ON\nMean ± Std across all instances & neighborhoods', 
+ax.set_title('Solution Quality Comparison (Distance) - Time Windows ON\nMean ± Std across all instances & neighborhoods',
              fontsize=13, fontweight='bold', pad=20)
 ax.set_xticks(x)
 ax.set_xticklabels(solver_order, fontsize=11)
 ax.grid(axis='y', alpha=0.3)
 
 for i, (bar, mean, std) in enumerate(zip(bars, solver_stats_on['mean'], solver_stats_on['std'])):
-    ax.text(bar.get_x() + bar.get_width()/2, mean + std + 100, 
+    ax.text(bar.get_x() + bar.get_width()/2, mean + std + 100,
             f'{mean:.0f}', ha='center', va='bottom', fontweight='bold', fontsize=10)
 
 plt.tight_layout()
@@ -352,28 +352,28 @@ plt.close()
 # ============================================================================
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
-for idx, (ax, tw, title_suffix) in enumerate([(axes[0], 'off', 'TW OFF'), 
+for idx, (ax, tw, title_suffix) in enumerate([(axes[0], 'off', 'TW OFF'),
                                                 (axes[1], 'on', 'TW ON')]):
     data = df[df['TW'] == tw]
     time_stats = data.groupby('Solver')['Time(ms)'].agg(['mean', 'std']).reindex(solver_order)
-    
-    bars = ax.bar(x, time_stats['mean'], width, 
-                  yerr=time_stats['std'], 
+
+    bars = ax.bar(x, time_stats['mean'], width,
+                  yerr=time_stats['std'],
                   capsize=5,
                   color=[solver_color_map[s] for s in solver_order],
                   alpha=0.8,
                   edgecolor='black',
                   linewidth=1.5)
-    
+
     ax.set_ylabel('Execution Time (ms)', fontsize=11, fontweight='bold')
     ax.set_xlabel('Solver Method', fontsize=11, fontweight='bold')
     ax.set_title(f'Execution Speed Comparison - {title_suffix}', fontsize=12, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(solver_order, fontsize=10)
     ax.grid(axis='y', alpha=0.3)
-    
+
     for bar, mean, std in zip(bars, time_stats['mean'], time_stats['std']):
-        ax.text(bar.get_x() + bar.get_width()/2, mean + std + 2, 
+        ax.text(bar.get_x() + bar.get_width()/2, mean + std + 2,
                 f'{mean:.1f}', ha='center', va='bottom', fontweight='bold', fontsize=9)
 
 plt.tight_layout()
@@ -389,13 +389,13 @@ fig, ax = plt.subplots(figsize=(12, 8))
 tw_off_data = df[df['TW'] == 'off'].copy()
 for solver in solver_order:
     solver_data = tw_off_data[tw_off_data['Solver'] == solver]
-    ax.scatter(solver_data['Time(ms)'], solver_data['Distance'], 
+    ax.scatter(solver_data['Time(ms)'], solver_data['Distance'],
               s=150, label=solver, alpha=0.7, edgecolors='black', linewidth=1.5,
               color=solver_color_map[solver])
 
 ax.set_xlabel('Execution Time (ms)', fontsize=12, fontweight='bold')
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
-ax.set_title('Pareto Frontier: Quality vs Speed Trade-off (TW OFF)\nEach point = one configuration (solver + neighborhood)', 
+ax.set_title('Pareto Frontier: Quality vs Speed Trade-off (TW OFF)\nEach point = one configuration (solver + neighborhood)',
              fontsize=13, fontweight='bold', pad=20)
 ax.legend(fontsize=11, loc='best')
 ax.grid(alpha=0.3)
@@ -424,13 +424,13 @@ fig, ax = plt.subplots(figsize=(12, 8))
 tw_on_data = df[df['TW'] == 'on'].copy()
 for solver in solver_order:
     solver_data = tw_on_data[tw_on_data['Solver'] == solver]
-    ax.scatter(solver_data['Time(ms)'], solver_data['Distance'], 
+    ax.scatter(solver_data['Time(ms)'], solver_data['Distance'],
               s=150, label=solver, alpha=0.7, edgecolors='black', linewidth=1.5,
               color=solver_color_map[solver])
 
 ax.set_xlabel('Execution Time (ms)', fontsize=12, fontweight='bold')
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
-ax.set_title('Pareto Frontier: Quality vs Speed Trade-off (TW ON)\nEach point = one configuration (solver + neighborhood)', 
+ax.set_title('Pareto Frontier: Quality vs Speed Trade-off (TW ON)\nEach point = one configuration (solver + neighborhood)',
              fontsize=13, fontweight='bold', pad=20)
 ax.legend(fontsize=11, loc='best')
 ax.grid(alpha=0.3)
@@ -462,7 +462,7 @@ neighborhood_colors = {'relocate': '#FFB6C1', 'relocate+swap': '#87CEEB', 'reloc
 for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on', 'TW ON')]):
     data = df[df['TW'] == tw]
     neighbor_stats = data.groupby('Neighbor')['Distance'].agg(['mean', 'std']).reindex(neighborhood_order)
-    
+
     x_neigh = np.arange(len(neighborhood_order))
     bars = ax.bar(x_neigh, neighbor_stats['mean'], 0.6,
                   yerr=neighbor_stats['std'],
@@ -471,13 +471,13 @@ for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on
                   alpha=0.8,
                   edgecolor='black',
                   linewidth=1.5)
-    
+
     ax.set_ylabel('Distance (km)', fontsize=11, fontweight='bold')
     ax.set_title(f'Neighborhood Impact on Solution Quality - {title}', fontsize=12, fontweight='bold')
     ax.set_xticks(x_neigh)
     ax.set_xticklabels(neighborhood_order, fontsize=10, rotation=15, ha='right')
     ax.grid(axis='y', alpha=0.3)
-    
+
     for bar, mean, std in zip(bars, neighbor_stats['mean'], neighbor_stats['std']):
         ax.text(bar.get_x() + bar.get_width()/2, mean + std + 100,
                 f'{mean:.0f}', ha='center', va='bottom', fontweight='bold', fontsize=10)
@@ -507,7 +507,7 @@ for patch, solver in zip(bp['boxes'], solver_order):
     patch.set_alpha(0.7)
 
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
-ax.set_title('Solution Quality Distribution by Solver (TW OFF)\nBox plot showing median, quartiles, and outliers', 
+ax.set_title('Solution Quality Distribution by Solver (TW OFF)\nBox plot showing median, quartiles, and outliers',
              fontsize=13, fontweight='bold', pad=20)
 ax.grid(axis='y', alpha=0.3)
 plt.xticks(fontsize=11)
@@ -536,7 +536,7 @@ for patch, solver in zip(bp['boxes'], solver_order):
     patch.set_alpha(0.7)
 
 ax.set_ylabel('Distance (km)', fontsize=12, fontweight='bold')
-ax.set_title('Solution Quality Distribution by Solver (TW ON)\nBox plot showing median, quartiles, and outliers', 
+ax.set_title('Solution Quality Distribution by Solver (TW ON)\nBox plot showing median, quartiles, and outliers',
              fontsize=13, fontweight='bold', pad=20)
 ax.grid(axis='y', alpha=0.3)
 plt.xticks(fontsize=11)
@@ -553,7 +553,7 @@ fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on', 'TW ON')]):
     data = df[df['TW'] == tw]
     veh_stats = data.groupby('Solver')['Veh'].agg(['mean', 'std']).reindex(solver_order)
-    
+
     bars = ax.bar(x, veh_stats['mean'], width,
                   yerr=veh_stats['std'],
                   capsize=5,
@@ -561,13 +561,13 @@ for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on
                   alpha=0.8,
                   edgecolor='black',
                   linewidth=1.5)
-    
+
     ax.set_ylabel('Number of Vehicles', fontsize=11, fontweight='bold')
     ax.set_title(f'Average Vehicles Used - {title}', fontsize=12, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(solver_order, fontsize=10)
     ax.grid(axis='y', alpha=0.3)
-    
+
     for bar, mean, std in zip(bars, veh_stats['mean'], veh_stats['std']):
         ax.text(bar.get_x() + bar.get_width()/2, mean + std + 0.5,
                 f'{mean:.1f}', ha='center', va='bottom', fontweight='bold', fontsize=10)
@@ -587,7 +587,7 @@ df['AcceptanceRate'] = (df['NeighborsAccepted'] / df['NeighborsAttempted'] * 100
 for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on', 'TW ON')]):
     data = df[df['TW'] == tw]
     accept_stats = data.groupby('Solver')['AcceptanceRate'].agg(['mean', 'std']).reindex(solver_order)
-    
+
     bars = ax.bar(x, accept_stats['mean'], width,
                   yerr=accept_stats['std'],
                   capsize=5,
@@ -595,14 +595,14 @@ for idx, (ax, tw, title) in enumerate([(axes[0], 'off', 'TW OFF'), (axes[1], 'on
                   alpha=0.8,
                   edgecolor='black',
                   linewidth=1.5)
-    
+
     ax.set_ylabel('Acceptance Rate (%)', fontsize=11, fontweight='bold')
     ax.set_title(f'Move Acceptance Rate - {title}', fontsize=12, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(solver_order, fontsize=10)
     ax.set_ylim([0, 105])
     ax.grid(axis='y', alpha=0.3)
-    
+
     for bar, mean, std in zip(bars, accept_stats['mean'], accept_stats['std']):
         ax.text(bar.get_x() + bar.get_width()/2, mean + std + 2,
                 f'{mean:.1f}%', ha='center', va='bottom', fontweight='bold', fontsize=10)
