@@ -54,7 +54,7 @@
         { pkgs, system }:
         {
           default = pkgs.mkShell {
-            packages = with pkgs; [
+            packages = with pkgs; with python314Packages; [
               rustToolchain
               openssl
               pkg-config
@@ -64,6 +64,13 @@
               rust-analyzer
               self.formatter.${system}
               fontconfig
+
+              # python
+              matplotlib
+              numpy
+              pandas
+              seaborn
+              python
             ];
 
             env = {
