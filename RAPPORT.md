@@ -277,11 +277,30 @@ Observations :
 - Conclusion : Stratégies d'acceptation très différentes
 
 
+
 # Conclusion
 
-- Résumer les conclusions de la comparaison (temps, qualité)
-- Limites observées
-- Améliorations possibles
+Cette étude comparative a permis d'évaluer quatre approches de recherche locale sur le VRPTW, en faisant varier les opérateurs de voisinage et la présence de fenêtres de temps.
+
+## Qualité des solutions
+
+Les métaheuristiques — recherche tabou et recuit simulé — produisent systématiquement les meilleures solutions. Sans fenêtres de temps, elles surpassent la descente en distance totale, et restent supérieures même avec les contraintes temporelles actives. La marche aléatoire confirme son rôle de simple baseline : ses résultats sont deux à trois fois moins bons que ceux des métaheuristiques, ce qui illustre l'importance d'une stratégie d'exploration guidée.
+
+## Temps d'exécution
+
+Le coût de cette qualité est réel : la recherche tabou est environ 7 fois plus lente que la descente, qui reste elle-même plus rapide que le recuit simulé. Le recuit simulé offre cependant le meilleur compromis temps/qualité, atteignant des distances comparables à la recherche tabou avec un temps d'exécution nettement inférieur.
+
+## Impact des opérateurs de voisinage
+
+L'ajout du 2-opt apporte une amélioration significative, en particulier pour les instances sans contraintes temporelles. L'opérateur `swap` contribue de façon plus modérée. Ces résultats confirment l'intérêt de combiner plusieurs types de mouvements pour diversifier l'exploration.
+
+## Impact des fenêtres de temps
+
+L'activation des fenêtres de temps augmente le nombre de véhicules nécessaires d'un facteur 2,5 à 3, rendant le problème structurellement plus difficile. Le taux de voisins valides chute, ce qui réduit l'efficacité des opérateurs et rapproche les performances des différentes méthodes.
+
+## Limites et perspectives
+
+Les résultats reposent sur une seule exécution par configuration, sans graine fixée, ce qui limite leur reproductibilité statistique. Des expériences avec plusieurs répétitions et des seeds fixes permettraient de quantifier la variance et de valider les comparaisons. Par ailleurs, les paramètres (tenure, température initiale, taux de refroidissement) n'ont pas été optimisés systématiquement — un réglage par recherche en grille ou par méthode bayésienne pourrait améliorer sensiblement les résultats. 
 
 # Annexe — Comment exécuter
 
