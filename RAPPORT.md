@@ -20,7 +20,7 @@ La comparaison porte sur :
 
 Méthodes comparées :
 
-- Marche aléatoire (baseline)
+- Marche aléatoire
 - Descente (hill-climbing)
 - Recherche tabou
 - Recuit simulé
@@ -139,40 +139,6 @@ Paramètres utilisés :
 
 # Résultats
 
-## Tableaux
-
-Tableau complet des résultats (une exécution par configuration) :
-
-```
-Dataset  | TW  | Solver              | Neighbor           | Params                                                   | Veh | Distance | Time(ms) | Solutions | NeighborsAttempted | NeighborsAccepted
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-data101  | off | Random Walk         | relocate           | iterations=5000                                          |   8 |  3493.62 |     6.41 |      4599 |               5000 |              4598
-data101  | off | Random Walk         | relocate+swap      | iterations=5000                                          |   8 |  3819.52 |     5.78 |      4739 |               5000 |              4738
-data101  | off | Random Walk         | relocate+swap+2opt | iterations=5000                                          |   8 |  3639.70 |     5.21 |      4920 |               5000 |              4919
-data101  | off | Descent             | relocate           | iterations=5000                                          |   8 |  1334.70 |    10.07 |      4641 |               5000 |               227
-data101  | off | Descent             | relocate+swap      | iterations=5000                                          |   8 |  1324.44 |     9.60 |      4712 |               5000 |               207
-data101  | off | Descent             | relocate+swap+2opt | iterations=5000                                          |   8 |  1303.58 |     9.32 |      4924 |               5000 |               214
-data101  | off | Tabu Search         | relocate           | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1147.87 |    46.54 |     18345 |              25000 |               500
-data101  | off | Tabu Search         | relocate+swap      | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1179.10 |    42.86 |     16923 |              25000 |               500
-data101  | off | Tabu Search         | relocate+swap+2opt | iterations=500;tabu_tenure=20;attempts_per_iter=50       |   8 |  1218.93 |    42.60 |     20580 |              25000 |               500
-data101  | off | Simulated Annealing | relocate           | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1177.80 |    21.02 |      9116 |              10000 |              1128
-data101  | off | Simulated Annealing | relocate+swap      | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1157.22 |    20.18 |      9420 |              10000 |               961
-data101  | off | Simulated Annealing | relocate+swap+2opt | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |   8 |  1158.75 |    19.75 |      9725 |              10000 |               968
-data101  | on  | Random Walk         | relocate           | iterations=5000                                          |  27 |  2779.28 |    16.49 |       978 |               5000 |               977
-data101  | on  | Random Walk         | relocate+swap      | iterations=5000                                          |  31 |  3244.12 |    17.17 |      1499 |               5000 |              1498
-data101  | on  | Random Walk         | relocate+swap+2opt | iterations=5000                                          |  30 |  3046.92 |    16.71 |      1080 |               5000 |              1079
-data101  | on  | Descent             | relocate           | iterations=5000                                          |  25 |  1944.00 |    17.60 |       995 |               5000 |               171
-data101  | on  | Descent             | relocate+swap      | iterations=5000                                          |  29 |  2093.14 |    21.03 |      1679 |               5000 |               227
-data101  | on  | Descent             | relocate+swap+2opt | iterations=5000                                          |  30 |  2158.20 |    22.47 |      1381 |               5000 |               198
-data101  | on  | Tabu Search         | relocate           | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  24 |  1917.46 |    84.76 |      3714 |              25000 |               500
-data101  | on  | Tabu Search         | relocate+swap      | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  25 |  2044.62 |    84.39 |      4010 |              25000 |               497
-data101  | on  | Tabu Search         | relocate+swap+2opt | iterations=500;tabu_tenure=20;attempts_per_iter=50       |  29 |  2211.88 |    92.28 |      3299 |              25000 |               498
-data101  | on  | Simulated Annealing | relocate           | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  23 |  1959.31 |    33.13 |      1581 |              10000 |               748
-data101  | on  | Simulated Annealing | relocate+swap      | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  26 |  1893.14 |    38.07 |      2656 |              10000 |               767
-data101  | on  | Simulated Annealing | relocate+swap+2opt | iterations=10000;initial_temp=500.00;cooling_rate=0.9950 |  28 |  2061.99 |    38.05 |      1905 |              10000 |               620
-...
-```
-
 Les résultats complets (toutes instances) sont fournis par le programme et sauvegardés dans `outputs/<instance>/results.csv`.
 
 ## Comparaisons
@@ -203,9 +169,9 @@ Les tableaux sont générés directement dans la sortie CLI, et les valeurs dét
 
 Observations clés :
 
-- TW OFF : Tabu Search (~1150 km) et Simulated Annealing (~1170 km) surpassent Descent (~1310 km) de 13-15%
-- TW ON : Écart réduit, mais Tabu Search et SA restent meilleurs (~1950-2000 km vs ~2100 km pour Descent)
-- Random Walk : Clairement la pire approche (~3500 km TW OFF, ~3200 km TW ON)
+- TW OFF : Tabu Search et Simulated Annealing surpassent Descent de 13-15%
+- TW ON : Écart réduit, mais Tabu Search et SA restent meilleurs
+- Random Walk : Clairement la pire approche
 - Conclusion : Les métaheuristiques sont indispensables pour ce problème
 
 
@@ -244,17 +210,6 @@ Observations clés :
 
 ### Graphiques complémentaires
 
-
-![06_neighborhood_impact](figures/06_neighborhood_impact.png)
-
-Observations :
-
-- `relocate` seul : ~3350 km (TW OFF)
-- `+swap` : amélioration modérée
-- `+2opt` : amélioration plus forte (~500 km mieux que relocate seul)
-- Conclusion : 2-opt très utile, surtout pour instances sans TW
-
-
 ![07_boxplot_quality_tw_off](figures/07_boxplot_quality_tw_off.png)
 ![08_boxplot_quality_tw_on](figures/08_boxplot_quality_tw_on.png)
 
@@ -284,7 +239,8 @@ Cette étude comparative a permis d'évaluer quatre approches de recherche local
 
 ## Qualité des solutions
 
-Les métaheuristiques — recherche tabou et recuit simulé — produisent systématiquement les meilleures solutions. Sans fenêtres de temps, elles surpassent la descente en distance totale, et restent supérieures même avec les contraintes temporelles actives. La marche aléatoire confirme son rôle de simple baseline : ses résultats sont deux à trois fois moins bons que ceux des métaheuristiques, ce qui illustre l'importance d'une stratégie d'exploration guidée.
+Les métaheuristiques : recherche tabou et recuit simulé
+Produisent systématiquement les meilleures solutions. Sans fenêtres de temps, elles surpassent la descente en distance totale, et restent supérieures même avec les contraintes temporelles actives. La marche aléatoire confirme son rôle de simple baseline : ses résultats sont deux à trois fois moins bons que ceux des métaheuristiques, ce qui illustre l'importance d'une stratégie d'exploration guidée.
 
 ## Temps d'exécution
 
@@ -325,7 +281,7 @@ Alternative (en une commande) : `nix develop -c cargo run --release`
 **Dépendances requises :**
 
 ```bash
-pip install pandas matplotlib numpy seaborn
+pip install pandas matplotlib numpy seaborn # ou nix develop 
 ```
 
 **Génération :**
