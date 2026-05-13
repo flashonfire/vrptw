@@ -229,8 +229,8 @@ Observations clés :
 Observations :
 
 - Random Walk : Boîte très large = très instable
-- Descent : Boîte étroite = stable mais moins bon
-- Tabu/SA : Boîtes étroites = résultats reproductibles
+- Tabu/SA : Boîtes étroites = résultats stables
+- Descent : Boîte étroite = stable (mais résultats de moins bonne qualité que tabu/SA)
 - Conclusion : Métaheuristiques = plus fiables
 
 
@@ -257,7 +257,8 @@ Produisent systématiquement les meilleures solutions. Sans fenêtres de temps, 
 
 ## Temps d'exécution
 
-Le coût de cette qualité est réel : la recherche tabou est environ 7 fois plus lente que la descente, qui reste elle-même plus rapide que le recuit simulé. Le recuit simulé offre cependant le meilleur compromis temps/qualité, atteignant des distances comparables à la recherche tabou avec un temps d'exécution nettement inférieur.
+Le coût de cette qualité est important: les algos qui produisent des meilleures solutions (Tabu, SA) sont nettement plus lents que les autres (Descente / Random Walk). Par exemple, la recherche tabou est environ 7 fois plus lente que la descente.
+Le recuit simulé offre le meilleur compromis temps/qualité, atteignant des distances comparables à la recherche tabou avec un temps d'exécution nettement inférieur.
 
 ## Impact des opérateurs de voisinage
 
