@@ -135,7 +135,7 @@ Paramètres utilisés :
   - `iterations` : nombre total de voisins évalués.
 
 - Recherche tabou: 
-  - `tabu_tenure` : durée pendant laquelle un mouvement reste interdit après avoir été effectué, forçant l'exploration de nouvelles zones
+  - `tabu_tenure` : taille maximale du tableau pour la recherche tabou
   - `attempts_per_iter` : nombre de voisins candidats générés par itération avant de retenir le meilleur mouvement non tabou.
 
 - Recuit simulé:
