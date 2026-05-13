@@ -121,9 +121,6 @@ Pour chaque instance et chaque configuration, on mesure :
 
 ## Répétitions et paramètres
 
-- Répétitions : 1 exécution par configuration (dataset, TW, méthode, voisinage)
-- Seed : non fixé, générateur aléatoire initialisé par le système
-
 Paramètres utilisés :
 
 - Budgets par méthode
@@ -131,6 +128,22 @@ Paramètres utilisés :
   - Descente : `iterations=5000`
   - Recherche tabou : `iterations=500`, `tabu_tenure=20`, `attempts_per_iter=50`
   - Simulated annealing : `iterations=10000`, `initial_temp=500.0`, `cooling_rate=0.995`
+
+### Rôle des paramètres
+
+- Random Walk / Descente:
+  - `iterations` : nombre total de voisins évalués.
+
+- Recherche tabou: 
+  - `tabu_tenure` : durée pendant laquelle un mouvement reste interdit après avoir été effectué, forçant l'exploration de nouvelles zones
+  - `attempts_per_iter` : nombre de voisins candidats générés par itération avant de retenir le meilleur mouvement non tabou.
+
+- Recuit simulé:
+  - `initial_temp` : température initiale, qui contrôle la probabilité d'accepter une solution dégradée en début de recherche ;
+  - `cooling_rate` : facteur multiplicatif appliqué à chaque itération (`T_{k+1} = T_k × cooling_rate`), pilotant la convergence progressive vers une recherche plus intensive.
+
+- Répétitions : 1 exécution par configuration (dataset, TW, méthode, voisinage)
+- Seed : non fixé, générateur aléatoire initialisé par le système
 
 ## Machine et environnement
 
